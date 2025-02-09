@@ -2,12 +2,24 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.6.
 
+This project is for Paper.id take home test
+
+## Installation
+
+Run `npm install` to install dependencies
+
 ## Development server
 
 To start a local development server, run:
 
 ```bash
 ng serve
+```
+
+or
+
+```bash
+npm start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
@@ -42,6 +54,12 @@ To execute unit tests with the [Karma](https://karma-runner.github.io) test runn
 
 ```bash
 ng test
+```
+
+or
+
+```bash
+npm run test
 ```
 
 ## Running end-to-end tests
