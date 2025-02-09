@@ -1,0 +1,76 @@
+<div class="w-full overflow-x-auto shadow-md sm:rounded-lg">
+  <div class="inline-block min-w-full align-middle">
+    <div class="overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200 table-fixed">
+        <thead class="bg-gray-100">
+          <tr>
+            <th *ngFor="let header of headers, let headerIndex = index" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">
+              {{ header.label }}
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          @if (data.length && !isLoading) {
+            <tr *ngFor="let item of data, let itemIndex = index">
+              <td *ngFor="let header of headers, let headerIndex = index" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap">
+                <div class="truncate max-w-[200px] md:max-w-[300px]">
+                  <ng-container *ngIf="columnTemplates[header.key]; else defaultCell">
+                    <ng-container *ngTemplateOutlet="columnTemplates[header.key]; context: { $implicit: item }"></ng-container>
+                  </ng-container>
+
+                  <ng-template #defaultCell>
+                    {{ item[header.key] }}
+                  </ng-template>
+                </div>
+              </td>
+            </tr>
+          } @else if (isLoading) {
+            <tr>
+              <td [attr.colspan]="headers.length" class="py-4 px-6 text-center text-gray-500">
+                <div class="flex justify-center items-center">
+                  <span class="animate-spin border-4 border-gray-300 border-t-blue-500 rounded-full h-6 w-6"></span>
+                  <span class="ml-2">Loading...</span>
+                </div>
+              </td>
+            </tr>
+          } @else {
+            <tr class="hover:bg-gray-100">
+              <td
+                class="p-4 h-4 text-center text-gray-500"
+                [attr.colspan]="headers.length"
+              >
+                No Data
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <!-- Footer -->
+      <div class="flex justify-between items-center text-sm p-4 bg-gray-100 absolute md:relative w-full">
+        <div class="text-slate-500 mr-4 md:mr-0">
+          Showing {{ startItem }} - {{ endItem }}
+        </div>
+        <div class="text-slate-500 flex gap-2">
+          <div class="flex items-center min-h-full cursor-pointer" [class.opacity-50]="metas.page === 1" [class.cursor-not-allowed]="metas.page === 1" [class.cursor-pointer]="metas.page > 1" (click)="prevPage()">
+            Prev
+          </div>
+          <div>
+            <input
+              [ngModel]="metas.page"
+              (ngModelChange)="onPageChange($event)"
+              class="focus:outline-none focus:ring-0 focus:border-slate-900/75 focus:shadow-md border border-slate-300 rounded-md py-1 px-2 w-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center"
+            />
+          </div>
+          <div
+            class="flex items-center min-h-full cursor-pointer"
+            (click)="nextPage()"
+          >
+            Next
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

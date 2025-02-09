@@ -1,0 +1,38 @@
+<div class="flex flex-col md:p-4">
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 p-4 md:p-0">
+    <h1 class="text-3xl font-bold mb-4 md:mb-0">User List</h1>
+
+    <div class="w-full md:w-1/3">
+      <input
+        [ngModel]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+        [disabled]="isLoading"
+        class="focus:outline-none focus:ring-0 focus:border-blue-200/75 focus:shadow-md focus:shadow-blue-500/30 border border-slate-300 rounded-md py-1 px-2 w-full h-10 disabled:opacity-75 disabled:text-slate-400 disabled:bg-slate-100/40 disabled:cursor-not-allowed"
+        placeholder="Search user name..."
+      />
+    </div>
+  </div>
+
+  @if (errorMessage) {
+    <div class="p-4 mb-4 border border-red-500 rounded-md bg-red-200">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <paper-table
+    [headers]="headers"
+    [data]="filteredUsers"
+    [isLoading]="isLoading"
+    [columnTemplates]="columnTemplates"
+    (updatePagination)="loadUsers($event)"
+  >
+      <ng-template #websiteTemplate let-item>
+        <a [href]="item.url" target="_blank" class="text-blue-600 visited:text-blue-700 hover:text-blue-500 hover:underline">{{ item.website }}</a>
+      </ng-template>
+      <ng-template #actionTemplate let-item>
+        <button class="py-1 px-3 rounded-lg text-white cursor-pointer active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500 disabled:opacity-75 disabled:text-slate-400">
+          Detail
+        </button>
+      </ng-template>
+  </paper-table>
+</div>
