@@ -3,7 +3,7 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { TableHeader, TableMeta } from '../../../../shared/components/table/table.model';
 import { User } from '../../../../types/user.model';
 import { UserService } from '../../service/user.service';
-import { convertToHttps } from '../../../../shared/utils/urls';
+import { Observable } from 'rxjs';
 
 @Component({
   standalone: false,
@@ -35,12 +35,11 @@ export class UserListComponent {
       label: 'Action',
     },
   ];
-  users: User[] = [];
-  filteredUsers: User[] = [];
-  searchTerm = ''
-  errorMessage = '';
-  isLoading = false;
   columnTemplates: { [key: string]: TemplateRef<any> } = {};
+  users$!: Observable<User[]>;
+  isLoading$!: Observable<boolean>;
+  search$!: Observable<string>;
+  errorMessage$!: Observable<string>;
 
   @ViewChild('websiteTemplate', { static: true }) websiteTemplate!: TemplateRef<any>;
   @ViewChild('emailTemplate', { static: true }) emailTemplate!: TemplateRef<any>;
@@ -55,43 +54,28 @@ export class UserListComponent {
   }
 
   ngOnInit() {
+    this.users$ = this.userService.filteredUsers$;
+    this.isLoading$ = this.userService.isLoading$;
+    this.search$ = this.userService.search$;
+    this.errorMessage$ = this.userService.errorMessage$;
+
     this.activeRoute.queryParams.subscribe(({ search }) => {
-      this.searchTerm = search || '';
+      this.userService.setSearchTerm(search || '');
     });
     this.loadUsers();
   }
 
   loadUsers(metas: TableMeta = { page: 1, perPage: 10 }): void {
-    this.isLoading = true;
-    this.userService.getUsers(metas).subscribe({
-      next: data => {
-        this.users = data.map(user => ({
-          ...user,
-          url: convertToHttps(user.website)
-        }));
-        this.isLoading = false;
-
-        this.filterUsers();
-      },
-      error: (err) => {
-        this.errorMessage = err.message;
-        this.isLoading = false;
-      },
-    })
+    this.userService.getUsers(metas);
   }
 
   onSearchChange(term: string): void {
-    this.searchTerm = term;
+    this.userService.setSearchTerm(term);
     this.router.navigate([], {
       queryParams: { search: term },
       queryParamsHandling: 'merge',
     });
 
-    this.filterUsers();
-  }
-
-  filterUsers(): void {
-    this.filteredUsers = this.users.filter(({ name }: User) => !this.searchTerm || name.toLowerCase().includes(this.searchTerm.toLowerCase()));
   }
 
   redirectToDetail(userId: number): void {

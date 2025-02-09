@@ -4,9 +4,9 @@
 
     <div class="w-full md:w-1/4">
       <input
-        [ngModel]="searchTerm"
+        [ngModel]="search$ | async"
         (ngModelChange)="onSearchChange($event)"
-        [disabled]="isLoading"
+        [disabled]="(isLoading$ | async) ?? false"
         class="h-10 disabled:opacity-75 disabled:text-slate-400 disabled:bg-slate-100/40 disabled:cursor-not-allowed w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         placeholder="Search user name..."
         type="text"
@@ -14,16 +14,16 @@
     </div>
   </div>
 
-  @if (errorMessage) {
+  @if (errorMessage$ | async) {
     <div class="p-4 mb-4 border border-red-500 rounded-md bg-red-200">
-      {{ errorMessage }}
+      {{ errorMessage$ | async }}
     </div>
   }
 
   <paper-table
     [headers]="headers"
-    [data]="filteredUsers"
-    [isLoading]="isLoading"
+    [data]="users$ | async"
+    [isLoading]="isLoading$ | async"
     [columnTemplates]="columnTemplates"
     (updatePagination)="loadUsers($event)"
   >

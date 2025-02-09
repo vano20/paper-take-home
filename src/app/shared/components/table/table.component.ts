@@ -10,8 +10,8 @@ import { TableHeader, TableMeta } from './table.model';
 
 export class TableComponent {
   @Input() headers: TableHeader[] = [];
-  @Input() data: any[] = [];
-  @Input() isLoading = false;
+  @Input() data: any[] | null = [];
+  @Input() isLoading: boolean | null = false;
 
   @Input() columnTemplates: { [key: string]: TemplateRef<any> } = {};
   @Input() metas: TableMeta = { page: 1, perPage: 10 };
@@ -20,11 +20,11 @@ export class TableComponent {
 
   get startItem(): number {
     const { page, perPage } = this.metas;
-    return ((page - 1) * this.data.length) + 1;
+    return ((page - 1) * (this.data?.length ?? 0)) + 1;
   }
 
   get endItem(): number {
-    return this.metas.page * this.data.length;
+    return this.metas.page * (this.data?.length ?? 0);
   }
 
   prevPage(): void {

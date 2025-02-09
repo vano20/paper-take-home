@@ -1,18 +1,52 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, map, Observable, throwError } from 'rxjs';
 import { User } from '../../../types/user.model';
 import { TableMeta } from '../../../shared/components/table/table.model';
+import { convertToHttps } from '../../../shared/utils/urls';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private usersSubject = new BehaviorSubject<User[]>([]);
+  private searchSubject = new BehaviorSubject<string>('');
+  private errorMessageSubject = new BehaviorSubject<string>('');
+  private isLoadingSubject = new BehaviorSubject<boolean>(false);
   private apiUrl = 'https://jsonplaceholder.typicode.com/users';
 
   constructor(private http: HttpClient) { }
 
-  getUsers(metas: TableMeta): Observable<User[]> {
+  users$ = this.usersSubject.asObservable();
+  search$ = this.searchSubject.asObservable();
+  isLoading$ = this.isLoadingSubject.asObservable();
+  errorMessage$ = this.errorMessageSubject.asObservable();
+
+  filteredUsers$ = combineLatest([this.users$, this.search$]).pipe(
+    map(([users, searchTerm]) =>
+      users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
+  );
+
+  setUsers(users: User[]): void {
+    this.usersSubject.next(users);
+  }
+
+  setSearchTerm(search: string): void {
+    this.searchSubject.next(search);
+  }
+
+  setErrorMessage(message: string): void {
+    this.errorMessageSubject.next(message);
+  }
+
+  setLoadingState(isLoading: boolean): void {
+    this.isLoadingSubject.next(isLoading);
+  }
+
+  getUsers(metas: TableMeta): void {
+    this.setLoadingState(true);
+
     const config = {
       params: {
         _page: metas.page,
@@ -20,12 +54,25 @@ export class UserService {
       }
     };
 
-    return this.http.get<User[]>(this.apiUrl, config).pipe(
+    this.http.get<User[]>(this.apiUrl, config).pipe(
       catchError((error) => {
         console.log('Error fetcing users', error)
         return throwError(() => new Error('Failed to load user, please try again.'))
       })
-    );
+    ).subscribe({
+      next: (users) => {
+        this.setUsers(users.map(user => ({
+          ...user,
+          url: convertToHttps(user.website)
+        })));
+        this.setLoadingState(false);
+      },
+      error: (error) => {
+        this.setErrorMessage(error.message ?? 'Something went wrong, Please contact administrator');
+        this.setLoadingState(false);
+        console.log(this.errorMessage$);
+      }
+    });;
   }
 
   getUserById(id: number): Observable<User> {

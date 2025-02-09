@@ -1,6 +1,6 @@
 export interface TableHeader {
-  key: string;        // Column identifier
-  label: string;      // Display name for the column
+  key: string;
+  label: string;
   headerCss?: string;
   bodyCss?: string;
 }
