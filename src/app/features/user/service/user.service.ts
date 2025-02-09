@@ -29,6 +29,11 @@ export class UserService {
   }
 
   getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${id}`);
+    return this.http.get<User>(`${this.apiUrl}/${id}`).pipe(
+      catchError((error) => {
+        console.log('Error fetcing user detail', error)
+        return throwError(() => new Error('Failed to load user detail, please try again.'))
+      })
+    );
   }
 }

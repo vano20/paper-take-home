@@ -54,11 +54,11 @@ export class UserListComponent {
     };
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activeRoute.queryParams.subscribe(({ search }) => {
       this.searchTerm = search || '';
-      this.loadUsers();
     });
+    this.loadUsers();
   }
 
   loadUsers(metas: TableMeta = { page: 1, perPage: 10 }): void {
@@ -90,7 +90,11 @@ export class UserListComponent {
     this.filterUsers();
   }
 
-  filterUsers() {
+  filterUsers(): void {
     this.filteredUsers = this.users.filter(({ name }: User) => !this.searchTerm || name.toLowerCase().includes(this.searchTerm.toLowerCase()));
+  }
+
+  redirectToDetail(userId: number): void {
+    this.router.navigate([userId], { relativeTo: this.activeRoute });
   }
 }

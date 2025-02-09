@@ -1,0 +1,66 @@
+<div class="flex justify-center items-center min-h-screen bg-gray-100">
+  @if (isLoading) {
+    <div class="flex flex-col items-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <p class="mt-4 text-gray-500">Loading user details...</p>
+    </div>
+  } @else {
+    <div class="max-w-md w-full bg-white shadow-lg rounded-xl p-6">
+      <div class="mb-4">
+        <button
+          (click)="goBack()"
+          class="flex items-center text-blue-600 hover:text-blue-500 font-medium cursor-pointer"
+        >
+          ← Back
+        </button>
+      </div>
+
+      <div class="text-center">
+        <h1 class="text-2xl font-bold text-gray-800">{{ user?.name | emptyValue }}</h1>
+        @if (user?.website) {
+        <a
+          [href]="user?.website"
+          target="_blank"
+          class="text-blue-600 hover:underline text-sm"
+        >
+          {{ user?.website }}
+        </a>
+      }
+      </div>
+      <div class="mt-4 space-y-4">
+        @if (user?.email) {
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Email</p>
+            <a
+              [href]="'mailto:' + user?.email"
+              class="text-gray-800 font-medium hover:underline"
+            >
+              {{ user?.email }}
+            </a>
+          </div>
+        }
+        <div>
+          <p class="text-gray-500 text-sm font-medium">Phone</p>
+          <p class="text-gray-800 font-medium">{{ user?.phone | emptyValue }}</p>
+        </div>
+        <div>
+          <p class="text-gray-500 text-sm font-medium">Address</p>
+          <p class="text-gray-800 font-medium">
+            {{ user?.address?.street | emptyValue }}, {{ user?.address?.suite | emptyValue }}, {{ user?.address?.city | emptyValue }}, {{ user?.address?.zipcode | emptyValue }}
+          </p>
+        </div>
+        <div>
+          <p class="text-gray-500 text-sm font-medium">Work at</p>
+          <p class="text-gray-800 font-medium">
+            {{ user?.company?.name | emptyValue }}
+          </p>
+          @if (user?.company?.catchPhrase || user?.company?.bs) {
+            <p class="text-gray-800 font-medium italic border-l-4 border-blue-500 pl-4">
+              "{{ user?.company?.catchPhrase || user?.company?.bs }}"
+            </p>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
