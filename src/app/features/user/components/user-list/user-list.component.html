@@ -1,42 +1,40 @@
-<div class="flex flex-col md:p-6 p-0 min-h-screen">
-  <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 p-4 md:p-0">
-    <h1 class="text-2xl font-bold text-gray-800 mb-4 md:mb-0">User List</h1>
+<div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 p-4 md:p-0">
+  <h1 class="text-2xl font-bold text-gray-800 mb-4 md:mb-0">User List</h1>
 
-    <div class="w-full md:w-1/4">
-      <input
-        [ngModel]="search$ | async"
-        (ngModelChange)="onSearchChange($event)"
-        [disabled]="(isLoading$ | async) ?? false"
-        class="h-10 disabled:opacity-75 disabled:text-slate-400 disabled:bg-slate-100/40 disabled:cursor-not-allowed w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Search user name..."
-        type="text"
-      />
-    </div>
+  <div class="w-full md:w-1/4">
+    <input
+      [ngModel]="search$ | async"
+      (ngModelChange)="onSearchChange($event)"
+      [disabled]="(isLoading$ | async) ?? false"
+      class="h-10 disabled:opacity-75 disabled:text-slate-400 disabled:bg-slate-100/40 disabled:cursor-not-allowed w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Search user name..."
+      type="text"
+    />
   </div>
-
-  @if (errorMessage$ | async) {
-    <div class="p-4 mb-4 border border-red-500 rounded-md bg-red-200">
-      {{ errorMessage$ | async }}
-    </div>
-  }
-
-  <paper-table
-    [headers]="headers"
-    [data]="users$ | async"
-    [isLoading]="isLoading$ | async"
-    [columnTemplates]="columnTemplates"
-    [totalDataCount]="totalDataCount$ | async"
-    (updatePagination)="loadUsers($event)"
-  >
-      <ng-template #websiteTemplate let-item>
-        <a [href]="item.url" target="_blank" class="text-blue-600 visited:text-blue-700 hover:text-blue-500 hover:underline">{{ item.website }}</a>
-      </ng-template>
-      <ng-template #actionTemplate let-item>
-        <button
-        class="py-2 px-4 text-sm font-semibold rounded-lg text-white cursor-pointer active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500 disabled:opacity-75 disabled:text-slate-400"
-        (click)="redirectToDetail(item.id)">
-          Detail
-        </button>
-      </ng-template>
-  </paper-table>
 </div>
+
+@if (errorMessage$ | async) {
+  <div class="p-4 mb-4 border border-red-500 rounded-md bg-red-200">
+    {{ errorMessage$ | async }}
+  </div>
+}
+
+<paper-table
+  [headers]="headers"
+  [data]="users$ | async"
+  [isLoading]="isLoading$ | async"
+  [columnTemplates]="columnTemplates"
+  [totalDataCount]="totalDataCount$ | async"
+  (updatePagination)="loadUsers($event)"
+>
+  <ng-template #websiteTemplate let-item>
+    <a [href]="item.url" target="_blank" class="text-blue-600 visited:text-blue-700 hover:text-blue-500 hover:underline">{{ item.website }}</a>
+  </ng-template>
+  <ng-template #actionTemplate let-item>
+    <button
+    class="py-2 px-4 text-sm font-semibold rounded-lg text-white cursor-pointer active:bg-blue-500/50 bg-blue-500 shadow-md shadow-slate-500/30 focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-lg focus:shadow-slate-500/30 hover:bg-blue-500/20 hover:text-blue-500 disabled:opacity-75 disabled:text-slate-400"
+    (click)="redirectToDetail(item.id)">
+      Detail
+    </button>
+  </ng-template>
+</paper-table>

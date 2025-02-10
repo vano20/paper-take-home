@@ -1,0 +1,132 @@
+.user-detail {
+  background-color: #f3f4f6;
+  min-height: 100vh;
+  padding: 2rem 0;
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    &-spinner {
+      width: 3rem;
+      height: 3rem;
+      border: 4px solid transparent;
+      border-top: 4px solid #3b82f6;
+      border-bottom: 4px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    &-text {
+      margin-top: 1rem;
+      color: #6b7280;
+    }
+  }
+
+  @keyframes spin {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  &__container {
+    padding: 1.5rem;
+  }
+
+  &__header {
+    margin-bottom: 1rem;
+
+    &-back {
+      display: flex;
+      align-items: center;
+      color: #3b82f6;
+      font-weight: 500;
+      cursor: pointer;
+      background: none;
+      border: none;
+
+      &:hover {
+        color: #2563eb;
+      }
+    }
+  }
+
+  &__card {
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+  }
+
+  &__info {
+    margin-bottom: 1rem;
+
+    &-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1f2937;
+    }
+
+    &-website {
+      margin-top: 0.5rem;
+
+      &-link {
+        color: #3b82f6;
+        font-size: 0.875rem;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+
+    &-label {
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    &-value {
+      font-size: 1rem;
+      color: #1f2937;
+      font-weight: 500;
+
+      &-link {
+        color: #3b82f6;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  &__quote {
+    font-size: 1rem;
+    font-weight: 500;
+    font-style: italic;
+    border-left: 4px solid #3b82f6;
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+    color: #1f2937;
+  }
+}
