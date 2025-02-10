@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class UserDetailComponent implements OnInit {
   constructor(
     private userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) { }
   user$!: Observable<User>;
   isLoading$!: Observable<boolean>;

@@ -106,7 +106,6 @@ export class UserService {
         this.setLoadingState(false);
       },
       error: (err) => {
-        this.setErrorMessage(err.message ?? 'Something went wrong, Please contact administrator');
         this.setLoadingState(false);
       }
     });
