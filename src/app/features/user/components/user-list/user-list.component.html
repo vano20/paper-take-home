@@ -25,6 +25,7 @@
     [data]="users$ | async"
     [isLoading]="isLoading$ | async"
     [columnTemplates]="columnTemplates"
+    [totalDataCount]="totalDataCount$ | async"
     (updatePagination)="loadUsers($event)"
   >
       <ng-template #websiteTemplate let-item>

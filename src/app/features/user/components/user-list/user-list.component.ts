@@ -40,6 +40,7 @@ export class UserListComponent {
   isLoading$!: Observable<boolean>;
   search$!: Observable<string>;
   errorMessage$!: Observable<string>;
+  totalDataCount$!: Observable<number>;
 
   @ViewChild('websiteTemplate', { static: true }) websiteTemplate!: TemplateRef<any>;
   @ViewChild('emailTemplate', { static: true }) emailTemplate!: TemplateRef<any>;
@@ -58,6 +59,7 @@ export class UserListComponent {
     this.isLoading$ = this.userService.isLoading$;
     this.search$ = this.userService.search$;
     this.errorMessage$ = this.userService.errorMessage$;
+    this.totalDataCount$ = this.userService.totalDataCount$;
 
     this.activeRoute.queryParams.subscribe(({ search }) => {
       this.userService.setSearchTerm(search || '');

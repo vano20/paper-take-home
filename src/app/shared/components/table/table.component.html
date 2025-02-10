@@ -59,11 +59,13 @@
             <input
               [ngModel]="metas.page"
               (ngModelChange)="onPageChange($event)"
-              class="focus:outline-none focus:ring-0 focus:border-slate-900/75 focus:shadow-md border border-slate-300 rounded-md py-1 px-2 w-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center"
+              type="number"
+              class="focus:outline-none focus:ring-0 focus:border-slate-900/75 focus:shadow-md border border-slate-300 rounded-md py-1 px-2 w-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center disabled:opacity-75 disabled:text-slate-400 disabled:bg-slate-100/40 disabled:cursor-not-allowed"
             />
           </div>
           <div
-            class="flex items-center min-h-full cursor-pointer"
+            class="flex items-center min-h-full"
+            [class.opacity-50]="isLastPage" [class.cursor-not-allowed]="isLastPage" [class.cursor-pointer]="!isLastPage"
             (click)="nextPage()"
           >
             Next

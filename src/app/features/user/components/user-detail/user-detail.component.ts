@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../service/user.service';
 import { User } from '../../../../types/user.model';
+import { Observable } from 'rxjs';
 
 @Component({
   standalone: false,
@@ -13,31 +14,24 @@ export class UserDetailComponent implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute
   ) { }
+  user$!: Observable<User>;
+  isLoading$!: Observable<boolean>;
 
   userId: string | null = null;
   isLoading = false;
-  user: User | null = null;
   errorMessage = ''
 
   ngOnInit() {
     this.userId = this.route.snapshot.paramMap.get('id');
+    this.user$ = this.userService.user$;
+    this.isLoading$ = this.userService.isLoading$;
+
     this.loadUserDetail();
   }
 
   loadUserDetail(): void {
-    this.isLoading = true;
-
     if (this.userId) {
-      this.userService.getUserById(parseInt(this.userId, 10)).subscribe({
-        next: data => {
-          this.user = data;
-          this.isLoading = false;
-        },
-        error: (err) => {
-          this.errorMessage = err.message ?? '';
-          this.isLoading = false;
-        },
-      })
+      this.userService.getUserById(parseInt(this.userId, 10));
     }
   }
 

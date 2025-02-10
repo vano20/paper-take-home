@@ -1,11 +1,11 @@
-<div class="flex justify-center items-center min-h-screen bg-gray-100">
+<div class="bg-gray-100 min-h-screen py-8">
   @if (isLoading) {
     <div class="flex flex-col items-center">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       <p class="mt-4 text-gray-500">Loading user details...</p>
     </div>
   } @else {
-    <div class="max-w-md w-full bg-white shadow-lg rounded-xl p-6">
+    <div class="mx-auto px-6">
       <div class="mb-4">
         <button
           (click)="goBack()"
@@ -14,51 +14,56 @@
           ← Back
         </button>
       </div>
-
-      <div class="text-center">
-        <h1 class="text-2xl font-bold text-gray-800">{{ user?.name | emptyValue }}</h1>
-        @if (user?.website) {
-        <a
-          [href]="user?.website"
-          target="_blank"
-          class="text-blue-600 hover:underline text-sm"
-        >
-          {{ user?.website }}
-        </a>
-      }
-      </div>
-      <div class="mt-4 space-y-4">
-        @if (user?.email) {
+  
+      <div class="bg-white shadow-md rounded-md p-6">
+        <div class="mb-4">
+          <h1 class="text-2xl font-bold text-gray-800">{{ (user$ | async)?.name | emptyValue }}</h1>
           <div>
-            <p class="text-gray-500 text-sm font-medium">Email</p>
+            @if ((user$ | async)?.website) {
             <a
-              [href]="'mailto:' + user?.email"
-              class="text-gray-800 font-medium hover:underline"
+              [href]="(user$ | async)?.website"
+              target="_blank"
+              class="text-blue-600 hover:underline text-sm"
             >
-              {{ user?.email }}
+              {{ (user$ | async)?.website }}
             </a>
+            }
           </div>
-        }
-        <div>
-          <p class="text-gray-500 text-sm font-medium">Phone</p>
-          <p class="text-gray-800 font-medium">{{ user?.phone | emptyValue }}</p>
         </div>
-        <div>
-          <p class="text-gray-500 text-sm font-medium">Address</p>
-          <p class="text-gray-800 font-medium">
-            {{ user?.address?.street | emptyValue }}, {{ user?.address?.suite | emptyValue }}, {{ user?.address?.city | emptyValue }}, {{ user?.address?.zipcode | emptyValue }}
-          </p>
-        </div>
-        <div>
-          <p class="text-gray-500 text-sm font-medium">Work at</p>
-          <p class="text-gray-800 font-medium">
-            {{ user?.company?.name | emptyValue }}
-          </p>
-          @if (user?.company?.catchPhrase || user?.company?.bs) {
-            <p class="text-gray-800 font-medium italic border-l-4 border-blue-500 pl-4">
-              "{{ user?.company?.catchPhrase || user?.company?.bs }}"
-            </p>
+  
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          @if ((user$ | async)?.email) {
+            <div>
+              <p class="text-gray-500 text-sm font-medium">Email</p>
+              <a
+                [href]="'mailto:' + (user$ | async)?.email"
+                class="text-gray-800 font-medium hover:underline"
+              >
+                {{ (user$ | async)?.email }}
+              </a>
+            </div>
           }
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Phone</p>
+            <p class="text-gray-800 font-medium">{{ (user$ | async)?.phone | emptyValue }}</p>
+          </div>
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Address</p>
+            <p class="text-gray-800 font-medium">
+              {{ (user$ | async)?.address?.street | emptyValue }}, {{ (user$ | async)?.address?.suite | emptyValue }}, {{ (user$ | async)?.address?.city | emptyValue }}, {{ (user$ | async)?.address?.zipcode | emptyValue }}
+            </p>
+          </div>
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Work at</p>
+            <p class="text-gray-800 font-medium">
+              {{ (user$ | async)?.company?.name | emptyValue }}
+            </p>
+            @if ((user$ | async)?.company?.catchPhrase || (user$ | async)?.company?.bs) {
+              <p class="text-gray-800 font-medium italic border-l-4 border-blue-500 pl-4">
+                "{{ (user$ | async)?.company?.catchPhrase || (user$ | async)?.company?.bs }}"
+              </p>
+            }
+          </div>
         </div>
       </div>
     </div>
