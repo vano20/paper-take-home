@@ -88,7 +88,7 @@ export class UserService {
         this.setErrorMessage(error.message ?? 'Something went wrong, Please contact administrator');
         this.setLoadingState(false);
       }
-    });;
+    });
   }
 
   getUserById(id: number): void {
