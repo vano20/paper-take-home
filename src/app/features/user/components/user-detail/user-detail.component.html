@@ -1,11 +1,11 @@
-@if (isLoading && !user$) {
+@if (isLoading$ | async) {
   <div class="user-detail__loading">
     <div class="user-detail__loading-spinner"></div>
     <p class="user-detail__loading-text">Loading user details...</p>
   </div>
-} @else if (!(user$ | async)?.id) {
+} @else if ((errorMessage$ | async)){
   <div class="user-detail__empty">
-    <p class="user-detail__empty-text">User not found</p>
+    <p class="user-detail__empty-text">{{ errorMessage$ | async }}</p>
     <a [routerLink]="['/']" class="user-detail__empty-home">Go Home</a>
   </div>
 } @else {

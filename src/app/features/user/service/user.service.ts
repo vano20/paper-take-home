@@ -70,7 +70,7 @@ export class UserService {
     this.http.get<User[]>(this.apiUrl, config).pipe(
       catchError((error) => {
         console.log('Error fetcing users', error)
-        return throwError(() => new Error('Failed to load user, please try again.'))
+        return throwError(() => new Error('Failed to load user, please try again.'));
       })
     ).subscribe({
       next: (response) => {
@@ -87,7 +87,6 @@ export class UserService {
       error: (error) => {
         this.setErrorMessage(error.message ?? 'Something went wrong, Please contact administrator');
         this.setLoadingState(false);
-        console.log(this.errorMessage$);
       }
     });;
   }
@@ -98,7 +97,10 @@ export class UserService {
     this.http.get<User>(`${this.apiUrl}/${id}`).pipe(
       catchError((error) => {
         console.log('Error fetcing user detail', error)
-        return throwError(() => new Error('Failed to load user detail, please try again.'))
+        if (error.status === 404) {
+          return throwError(() => new Error('User not found'));
+        }
+        return throwError(() => new Error('Failed to load user detail, please try again.'));
       })
     ).subscribe({
       next: (data) => {
@@ -106,6 +108,7 @@ export class UserService {
         this.setLoadingState(false);
       },
       error: (err) => {
+        this.setErrorMessage(err.message ?? 'Something went wrong, Please contact administrator');
         this.setLoadingState(false);
       }
     });

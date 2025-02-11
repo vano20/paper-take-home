@@ -16,17 +16,22 @@ export class UserDetailComponent implements OnInit {
   ) { }
   user$!: Observable<User>;
   isLoading$!: Observable<boolean>;
+  errorMessage$!: Observable<string>;
 
   userId: string | null = null;
   isLoading = false;
-  errorMessage = ''
 
   ngOnInit() {
     this.userId = this.route.snapshot.paramMap.get('id');
     this.user$ = this.userService.user$;
     this.isLoading$ = this.userService.isLoading$;
+    this.errorMessage$ = this.userService.errorMessage$;
 
     this.loadUserDetail();
+  }
+
+  ngOnDestroy() {
+    this.userService.setErrorMessage('');
   }
 
   loadUserDetail(): void {
