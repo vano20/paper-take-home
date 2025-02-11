@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { User } from '../../types/user.model';
-import { loadUsers, loadUsersFailure, loadUsersSuccess, resetUser, setFilter } from './user.actions';
+import { loadSelectedUser, loadUsers, loadUsersFailure, loadUsersSuccess, resetError, resetUser, setFilter, setSelectedUser } from './user.actions';
 
 export interface UserState {
   users: User[] | null;
@@ -8,6 +8,7 @@ export interface UserState {
   error: string | null;
   total: number;
   filter: string;
+  selectedUser: User | null;
 }
 
 export const initialState: UserState = {
@@ -16,13 +17,17 @@ export const initialState: UserState = {
   error: null,
   total: 0,
   filter: '',
+  selectedUser: null,
 };
 
 export const userReducer = createReducer(
   initialState,
   on(loadUsers, (state) => ({ ...state, loading: true, error: null })),
-  on(loadUsersSuccess, (state, { users, total }) => ({ ...state, loading: false, users, total })),
-  on(loadUsersFailure, (state, { error }) => ({ ...state, loading: false, error })),
+  on(loadUsersSuccess, (state, { users, total }) => ({ ...state, users, total, loading: false })),
+  on(loadUsersFailure, (state, { error }) => ({ ...state, error, loading: false })),
   on(setFilter, (state, { filter }) => ({ ...state, filter })),
+  on(loadSelectedUser, (state) => ({ ...state, loading: true, error: null })),
+  on(setSelectedUser, (state, { selectedUser }) => ({ ...state, selectedUser, loading: false })),
+  on(resetError, (state) => ({ ...state, error: initialState.error })),
   on(resetUser, () => initialState)
 );

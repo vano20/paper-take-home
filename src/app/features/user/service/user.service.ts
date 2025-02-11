@@ -41,6 +41,10 @@ export class UserService {
     });
   }
 
+  getSelectedUsersNgrx(id: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${id}`);
+  }
+
   getUserById(id: number): void {
     this.setLoadingState(true);
 

@@ -1,10 +1,10 @@
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { TableHeader, TableMeta } from '../../../../shared/components/table/table.model';
-import { User } from '../../../../types/user.model';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { User } from '../../../../types/user.model';
 import { UserState } from '../../../../state/user/user.reducer';
+import { TableHeader, TableMeta } from '../../../../shared/components/table/table.model';
 import { loading, error, total, filteredUser, selectFilter } from '../../../../state/user/user.selectors';
 import { loadUsers, setFilter } from '../../../../state/user/user.actions';
 
