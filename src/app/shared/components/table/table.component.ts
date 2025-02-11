@@ -36,8 +36,10 @@ export class TableComponent {
 
   prevPage(): void {
     if (this.metas.page > 1) {
-      this.metas.page -= 1;
-      this.updatePagination.emit(this.metas);
+      this.updatePagination.emit({
+        ...this.metas,
+        page: this.metas.page - 1,
+      });
     }
   }
 
@@ -45,7 +47,10 @@ export class TableComponent {
     if (this.isLastPage) return;
     this.metas.page += 1;
 
-    this.updatePagination.emit(this.metas);
+    this.updatePagination.emit({
+      ...this.metas,
+      page: this.metas.page + 1,
+    });
   }
 
   onPageChange(value: string): void {
