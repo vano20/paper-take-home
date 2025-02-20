@@ -3,6 +3,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { User } from '../../../types/user.model';
 import { TableMeta } from '../../../shared/components/table/table.model';
+import { Post } from '../../../types/post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class UserService {
   private errorMessageSubject = new BehaviorSubject<string>('');
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
   private apiUrl = 'https://jsonplaceholder.typicode.com/users';
+  private postUrl = 'https://jsonplaceholder.typicode.com/posts';
 
   constructor(private http: HttpClient) { }
 
@@ -66,5 +68,9 @@ export class UserService {
         this.setLoadingState(false);
       }
     });
+  }
+
+  getUserPosts(): Observable<Post[]> {
+   return this.http.get<Post[]>(`${this.postUrl}`);
   }
 }

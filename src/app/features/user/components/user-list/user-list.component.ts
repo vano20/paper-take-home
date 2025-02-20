@@ -6,7 +6,7 @@ import { User } from '../../../../types/user.model';
 import { UserState } from '../../../../state/user/user.reducer';
 import { TableHeader, TableMeta } from '../../../../shared/components/table/table.model';
 import { loading, error, total, filteredUser, selectFilter } from '../../../../state/user/user.selectors';
-import { loadUsers, setFilter } from '../../../../state/user/user.actions';
+import { loadPosts, loadUsers, setFilter } from '../../../../state/user/user.actions';
 
 @Component({
   standalone: false,
@@ -47,6 +47,10 @@ export class UserListComponent {
       label: 'Website',
     },
     {
+      key: 'posts',
+      label: 'Posts',
+    },
+    {
       key: 'action',
       label: 'Action',
     },
@@ -54,6 +58,7 @@ export class UserListComponent {
 
   @ViewChild('websiteTemplate', { static: true }) websiteTemplate!: TemplateRef<any>;
   @ViewChild('emailTemplate', { static: true }) emailTemplate!: TemplateRef<any>;
+  @ViewChild('postTemplate', { static: true }) postTemplate!: TemplateRef<any>;
   @ViewChild('actionTemplate', { static: true }) actionTemplate!: TemplateRef<any>;
 
   ngAfterViewInit() {
@@ -61,6 +66,7 @@ export class UserListComponent {
       website: this.websiteTemplate,
       email: this.emailTemplate,
       action: this.actionTemplate,
+      posts: this.postTemplate,
     };
   }
 
@@ -69,10 +75,15 @@ export class UserListComponent {
       this.setSearchTerm(search);
     });
     this.loadUsers();
+    this.loadPosts();
   }
 
   loadUsers(metas: TableMeta = { page: 1, perPage: 10 }): void {
     this.store.dispatch(loadUsers({ metas }));
+  }
+
+  loadPosts(): void {
+    this.store.dispatch(loadPosts());
   }
 
   setSearchTerm(search: string) {

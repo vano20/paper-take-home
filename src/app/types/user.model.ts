@@ -1,3 +1,5 @@
+import { Post } from "./post.model";
+
 export interface User {
   id: number;
   name: string;
@@ -19,4 +21,5 @@ export interface User {
     catchPhrase: string;
     bs: string;
   };
+  posts: Post[];
 }

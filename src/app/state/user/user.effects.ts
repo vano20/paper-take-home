@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserService } from '../../features/user/service/user.service';
-import { loadSelectedUser, loadUsers, loadUsersFailure, loadUsersSuccess, setSelectedUser } from './user.actions';
+import { loadPosts, loadPostsFailure, loadPostsSuccess, loadSelectedUser, loadUsers, loadUsersFailure, loadUsersSuccess, setSelectedUser } from './user.actions';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -39,7 +39,19 @@ export class UserEffects {
               errorMessage = 'User not found';
             }
             return of(loadUsersFailure({ error: errorMessage }));
-          })
+          }),
+        )
+      )
+    )
+  );
+
+  loadPost$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadPosts),
+      mergeMap(() =>
+        this.userService.getUserPosts().pipe(
+          map((posts) => loadPostsSuccess({ posts })),
+          catchError((error) => of(loadPostsFailure({ error: error.message ?? 'Something went wrong, Please contact administrator' })))
         )
       )
     )

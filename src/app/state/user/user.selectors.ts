@@ -11,4 +11,4 @@ export const total = createSelector(Users, (state) => state.total);
 export const selectFilter = createSelector(Users, (state) => state.filter);
 export const selectUser = createSelector(Users, (state) => state.selectedUser);
 
-export const filteredUser = createSelector(users, selectFilter, (users, filter) => users?.filter((user) => user.name.toLowerCase().includes(filter.toLowerCase())) ?? [])
+export const filteredUser = createSelector(users, selectFilter, (users, filter) => users?.filter((user) => user.name.toLowerCase().includes(filter.toLowerCase())) ?? []);

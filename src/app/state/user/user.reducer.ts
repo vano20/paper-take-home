@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { User } from '../../types/user.model';
-import { loadSelectedUser, loadUsers, loadUsersFailure, loadUsersSuccess, resetError, resetUser, setFilter, setSelectedUser } from './user.actions';
+import { loadPosts, loadPostsFailure, loadPostsSuccess, loadSelectedUser, loadUsers, loadUsersFailure, loadUsersSuccess, resetError, resetUser, setFilter, setSelectedUser } from './user.actions';
+import { Post } from '../../types/post.model';
 
 export interface UserState {
   users: User[] | null;
@@ -9,6 +10,7 @@ export interface UserState {
   total: number;
   filter: string;
   selectedUser: User | null;
+  posts: Post[] | null;
 }
 
 export const initialState: UserState = {
@@ -18,6 +20,7 @@ export const initialState: UserState = {
   total: 0,
   filter: '',
   selectedUser: null,
+  posts: [],
 };
 
 export const userReducer = createReducer(
@@ -29,5 +32,15 @@ export const userReducer = createReducer(
   on(loadSelectedUser, (state) => ({ ...state, loading: true, error: null })),
   on(setSelectedUser, (state, { selectedUser }) => ({ ...state, selectedUser, loading: false })),
   on(resetError, (state) => ({ ...state, error: initialState.error })),
-  on(resetUser, () => initialState)
+  on(resetUser, () => initialState),
+  on(loadPosts, (state) => ({ ...state, loading: true })),
+  on(loadPostsSuccess, (state, { posts }) => {
+    const users = state.users?.map(user => ({
+      ...user,
+      posts: posts.filter((post) => post.userId === user.id) ?? [],
+    })) ?? [];
+    
+    return { ...state, loading: false, users, };
+  }),
+  on(loadPostsFailure, (state, { error }) => ({ ...state, error, loading: false }))
 );
