@@ -33,6 +33,7 @@ const mockUsers = [
       catchPhrase: 'The best company',
       bs: 'High level approach on the web',
     },
+    posts: []
   },
 ];
 
